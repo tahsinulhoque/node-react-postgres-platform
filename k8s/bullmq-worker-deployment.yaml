@@ -1,0 +1,23 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bullmq-worker
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bullmq-worker
+  template:
+    metadata:
+      labels:
+        app: bullmq-worker
+    spec:
+      containers:
+        - name: worker
+          image: node-react-postgres-platform-backend:latest
+          imagePullPolicy: IfNotPresent
+          command: ["npm", "run", "worker"]
+          env:
+            - name: REDIS_URL
+              value: "redis://redis-service:6379"

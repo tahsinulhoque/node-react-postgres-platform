@@ -1,9 +1,9 @@
-import express from "express";
+﻿import express from "express";
 import cors from "cors";
 import { initSchema, read, write, pingWrite } from "./db.js";
 import redis from "./redisClient.js";
 import { enqueueItemCreated } from "./queue.js";
-import { searchHealth } from "./search.js";
+import { searchHealth, searchItems } from "./search.js";
 
 const app = express();
 app.use(cors());
@@ -46,6 +46,18 @@ app.get("/api/health/search", async (req, res) => {
   }
 });
 
+// Search items through OpenSearch.
+app.get("/api/search", async (req, res) => {
+  const q = String(req.query.q || "").trim();
+  if (!q) return res.status(400).json({ error: "q query parameter is required" });
+
+  try {
+    const items = await searchItems(q);
+    res.json({ query: q, items });
+  } catch (err) {
+    res.status(503).json({ error: err.message });
+  }
+});
 // Reads are served from the "read" pool (replica in a real cluster).
 app.get("/api/items", async (req, res) => {
   try {
@@ -86,3 +98,4 @@ initSchema()
     console.error("failed to initialize schema:", err);
     process.exit(1);
   });
+
