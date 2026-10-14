@@ -375,5 +375,3 @@ If a screenshot documents a failed test, label it as a failed/pending verificati
 ## Assessment submission
 
 Repository: https://github.com/tahsinulhoque/node-react-postgres-platform
-
-Share the repository with **cloudlycloud@gmail.com** as instructed by the assessment. If the repository is private, grant the reviewer collaborator access. The README intentionally records known failures and unverified behavior instead of claiming that every assessment requirement has passed.
